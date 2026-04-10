@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheFuture AI</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="chat-container">
+
+  <!-- TOP BAR -->
+  <div class="header">
+    🤖 TheFuture AI
+  </div>
+
+  <!-- CHAT AREA -->
+  <div id="chatbox" class="chatbox"></div>
+
+  <!-- INPUT AREA -->
+  <div class="input-area">
+    <input id="input" placeholder="Ask something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+</div>
+
+<script>
+async function sendMessage() {
+  let input = document.getElementById("input").value;
+  if (!input) return;
+
+  let chatbox = document.getElementById("chatbox");
+
+  // Show user message
+  chatbox.innerHTML += `<div class='user'>You: ${input}</div>`;
+
+  // Show thinking message
+  chatbox.innerHTML += `<div class='bot'>AI: thinking...</div>`;
+  chatbox.scrollTop = chatbox.scrollHeight;
+
+  // CALL GEMINI API (replace key)
+  let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      contents: [{
+        parts: [{
+          text: "You are a fast, logical AI. Give short, smart answers: " + input
+        }]
+      }]
+    })
+  });
+
+  let data = await response.json();
+
+  let reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error getting response";
+
+  // Replace "thinking..." with real answer
+  chatbox.innerHTML += `<div class='bot'>AI: ${reply}</div>`;
+
+  document.getElementById("input").value = "";
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+</script>
+
+</body>
+</html>
