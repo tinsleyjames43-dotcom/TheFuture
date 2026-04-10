@@ -1,0 +1,33 @@
+async function sendMessage() {
+  let input = document.getElementById("input").value;
+  if (!input) return;
+
+  let chatbox = document.getElementById("chatbox");
+
+  chatbox.innerHTML += `<div class='user'>You: ${input}</div>`;
+
+  chatbox.innerHTML += `<div class='bot'>AI: thinking...</div>`;
+
+  let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      contents: [{
+        parts: [{
+          text: "You are a fast, logical AI. Answer clearly and briefly: " + input
+        }]
+      }]
+    })
+  });
+
+  let data = await response.json();
+
+  let reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error getting response";
+
+  chatbox.innerHTML += `<div class='bot'>AI: ${reply}</div>`;
+
+  document.getElementById("input").value = "";
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
