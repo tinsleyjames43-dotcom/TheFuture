@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TheFuture AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="chat-container">
+
+  <div class="header">
+    🤖 TheFuture AI (Fast Logic Mode)
+  </div>
+
+  <div id="chatbox" class="chatbox"></div>
+
+  <div class="input-area">
+    <input id="input" placeholder="Ask something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+</div>
+
+<script>
+function sendMessage() {
+  let input = document.getElementById("input").value;
+  if (!input) return;
+
+  let chatbox = document.getElementById("chatbox");
+
+  // user message
+  chatbox.innerHTML += `<div class='user'>You: ${input}</div>`;
+
+  // bot response (simple logic engine)
+  let response = getAnswer(input.toLowerCase());
+
+  chatbox.innerHTML += `<div class='bot'>AI: ${response}</div>`;
+
+  document.getElementById("input").value = "";
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function getAnswer(text) {
+
+  // SIMPLE LOGIC SYSTEM (FAST RESPONSES)
+  if (text.includes("roblox")) return "Focus on making simple systems first, then scale up.";
+  if (text.includes("money")) return "Best way to earn is selling digital products or services.";
+  if (text.includes("website")) return "Use GitHub Pages or Netlify for free hosting.";
+  if (text.includes("idea")) return "Try combining simulator + progression systems for engagement.";
+
+  return "I need more detail to give a precise logical answer.";
+}
+</script>
+
+</body>
+</html>
